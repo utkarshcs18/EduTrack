@@ -38,4 +38,4 @@ dist/
 .coverage
 htmlcov/
 
-main.py
+studentData.csv
