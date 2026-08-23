@@ -250,8 +250,8 @@ def clean_data(df):
 
         df["Remarks"] = df["Final_Grade_Letter"].map(REMARK_MAP)
 
-        # Now that the grade/status/remark are finalized using numeric scores,
-        # replace any remaining missing subject scores with "Absent" for display.
+        # the grade/status/remark are finalized using numeric scores,
+        # replace remaining missing subject scores with "Absent" .
         for col in SUBJECT_COLUMNS:
             df[col] = df[col].apply(lambda v: "Absent" if pd.isna(v) else v)
 
