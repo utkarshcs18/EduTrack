@@ -31,7 +31,7 @@ The goal is simple: clone the repository, provide a compatible student CSV, and 
 ### 1. Clone
 
 ```bash
-git clone <YOUR_REPOSITORY_URL>
+git clone https://github.com/utkarshcs18/EduTrack.git
 cd EduTrack
 ```
 
