@@ -5,7 +5,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-
 APP_NAME = "EduTrack"
 DEFAULT_FILE = "studentData.csv"
 
@@ -550,7 +549,6 @@ def save_summary(df, cleaning_report, output_dir):
     output_file.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return output_file
 
-
 def main():
     args = parse_args()
     print("=" * 64)
@@ -621,7 +619,6 @@ def main():
             print("\nInvalid choice. Please select 0-9.")
 
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
