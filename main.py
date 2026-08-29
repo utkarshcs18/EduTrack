@@ -39,13 +39,11 @@ PASSING_GRADES = {"O", "A", "B", "C", "D"}
 # when computing the average used for this lookup.
 SCORE_TO_GRADE_SCALE = [(90, "O"), (80, "A"), (70, "B"), (60, "C"), (50, "D")]
 
-
 def score_to_grade(avg_score):
     for threshold, grade in SCORE_TO_GRADE_SCALE:
         if avg_score >= threshold:
             return grade
     return "F"
-
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -56,7 +54,6 @@ def parse_args():
         help=f"CSV file to analyze (default: {DEFAULT_FILE})",
     )
     return parser.parse_args()
-
 
 def load_csv(file_path):
     path = Path(file_path)
@@ -74,10 +71,8 @@ def load_csv(file_path):
     df.columns = df.columns.astype(str).str.strip()
     return df
 
-
 def validate_schema(df):
     return [col for col in REQUIRED_COLUMNS if col not in df.columns]
-
 
 def clean_text(value):
     if pd.isna(value):
@@ -87,12 +82,10 @@ def clean_text(value):
         return np.nan
     return value
 
-
 def title_case(value):
     if pd.isna(value):
         return np.nan
     return str(value).strip().title()
-
 
 def roman_to_int(value):
     roman = str(value).strip().upper()
@@ -110,7 +103,6 @@ def roman_to_int(value):
             total += current
             previous = current
     return total
-
 
 def normalize_grade_class(value):
     if pd.isna(value):
@@ -137,7 +129,6 @@ def normalize_grade_class(value):
         suffix = {1: "st", 2: "nd", 3: "rd"}.get(number % 10, "th")
     return f"{number}{suffix}"
 
-
 def normalize_yes_no(value):
     if pd.isna(value):
         return np.nan
@@ -148,14 +139,12 @@ def normalize_yes_no(value):
         return "No"
     return np.nan
 
-
 def normalize_grade(value):
     if pd.isna(value):
         return np.nan
     text = str(value).strip().upper()
     mapping = {"O": "O", "A": "A", "B": "B", "C": "C", "D": "D", "F": "F"}
     return mapping.get(text, np.nan)
-
 
 def clean_data(df):
     df = df.copy()
@@ -268,12 +257,10 @@ def clean_data(df):
 
     return df, report
 
-
 def print_header(title):
     print("\n" + "=" * 64)
     print(title.center(64))
     print("=" * 64)
-
 
 def display_value(value, date=False):
     if pd.isna(value):
@@ -284,7 +271,6 @@ def display_value(value, date=False):
         return f"{value:.2f}"
     return str(value)
 
-
 def dataset_overview(df):
     print_header("DATASET OVERVIEW")
     print(f"Students/Rows     : {len(df)}")
@@ -294,7 +280,6 @@ def dataset_overview(df):
         print(f"{i:>2}. {col}")
     print("\nData Types:")
     print(df.dtypes.to_string())
-
 
 def dataset_health(raw_df, cleaned_df):
     print_header("DATASET HEALTH")
@@ -323,7 +308,6 @@ def dataset_health(raw_df, cleaned_df):
         if col in cleaned_df.columns:
             print(f"  {col:<26}: {int(cleaned_df[col].eq('Absent').sum())} marked 'Absent'")
 
-
 def validation_report(df, missing):
     print_header("DATASET VALIDATION")
     if not missing:
@@ -338,11 +322,9 @@ def validation_report(df, missing):
     print("\nPlease provide a CSV that follows the EduTrack schema.")
     return False
 
-
 def find_student(df):
     query = input("Enter Student ID: ").strip()
     return df[df["Student_ID"].astype(str).str.strip().str.upper() == query.upper()], query
-
 
 def student_search(df):
     print_header("SEARCH STUDENT")
@@ -358,11 +340,9 @@ def student_search(df):
             value = display_value(row[col], col == "Enrollment_Date")
             print(f"{col.replace('_', ' '):<28}: {value}")
 
-
 def performance_series(df):
     numeric = df[SUBJECT_COLUMNS].apply(pd.to_numeric, errors="coerce")
     return numeric.mean(axis=1, skipna=True)
-
 
 def student_report(df):
     print_header("STUDENT REPORT")
@@ -391,7 +371,6 @@ def student_report(df):
         print(f"Enrollment Date  : {display_value(row['Enrollment_Date'], True)}")
         print(f"Remarks          : {display_value(row['Remarks'])}")
 
-
 def top_students(df):
     print_header("TOP STUDENTS")
     raw = input("How many top students? ").strip()
@@ -415,7 +394,6 @@ def top_students(df):
     for rank, (_, row) in enumerate(work.iterrows(), 1):
         print(f"{rank:<6}{str(row['Student_ID']):<14}{str(row['Name'])[:22]:<24}{row['Subject_Average']:>10.2f}")
 
-
 def class_statistics(df):
     print_header("CLASS STATISTICS")
     print(f"Students: {len(df)}")
@@ -427,7 +405,6 @@ def class_statistics(df):
     print(f"\nOverall subject average: {avg.mean():.2f}/100")
     print(f"Pass rate: {df['Final_Grade_Status'].eq('Pass').mean() * 100:.2f}%")
     print(f"Fail rate: {df['Final_Grade_Status'].eq('Fail').mean() * 100:.2f}%")
-
 
 def attendance_analysis(df):
     print_header("ATTENDANCE ANALYSIS")
@@ -444,7 +421,6 @@ def attendance_analysis(df):
     print(result.to_string(float_format=lambda x: f"{x:.2f}"))
     print("\nInterpretation: descriptive comparison only; it does not prove causation.")
 
-
 def study_time_analysis(df):
     print_header("STUDY TIME ANALYSIS")
     work = df.copy()
@@ -459,7 +435,6 @@ def study_time_analysis(df):
     )
     print(result.to_string(float_format=lambda x: f"{x:.2f}"))
     print("\nInterpretation: descriptive comparison only; it does not prove causation.")
-
 
 def grade_analysis(df):
     print_header("GRADE ANALYSIS")
@@ -478,7 +453,6 @@ def grade_analysis(df):
     missing = int(df["Final_Grade_Letter"].isna().sum())
     if missing:
         print(f"Unknown/Missing  : {missing}")
-
 
 def full_report(df, cleaning_report):
     print_header("EDUTRACK FULL REPORT")
@@ -514,7 +488,6 @@ def full_report(df, cleaning_report):
     for i, (_, row) in enumerate(top.iterrows(), 1):
         print(f"{i}. {row['Student_ID']} - {row['Name']} - {row['Subject_Average']:.2f}/100")
 
-
 def save_cleaned_data(df, output_dir):
     output_dir.mkdir(parents=True, exist_ok=True)
     output_file = output_dir / "cleaned_student_data.csv"
@@ -523,7 +496,6 @@ def save_cleaned_data(df, output_dir):
         export["Enrollment_Date"] = export["Enrollment_Date"].dt.strftime("%d-%m-%Y")
     export.to_csv(output_file, index=False)
     return output_file
-
 
 def save_summary(df, cleaning_report, output_dir):
     output_dir.mkdir(parents=True, exist_ok=True)
