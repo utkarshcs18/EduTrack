@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 APP_NAME = "EduTrack"
-DEFAULT_FILE = "studentData.csv"
+DEFAULT_FILE = "data/studentData.csv"
 
 REQUIRED_COLUMNS = [
     "Student_ID", "Name", "Gender", "Age", "Grade_Class",
@@ -420,6 +420,7 @@ def attendance_analysis(df):
     )
     print(result.to_string(float_format=lambda x: f"{x:.2f}"))
     print("\nInterpretation: descriptive comparison only; it does not prove causation.")
+
 
 def study_time_analysis(df):
     print_header("STUDY TIME ANALYSIS")

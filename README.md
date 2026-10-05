@@ -46,7 +46,7 @@ pip install -r requirements.txt
 Put a compatible CSV in the project directory named:
 
 ```text
-studentData.csv
+data/studentData.csv
 ```
 
 Then run:
